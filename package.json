@@ -1,0 +1,18 @@
+{
+  "name": "limaspike",
+  "version": "0.0.0",
+  "description": "lima spike ==========",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/limajs/limaspike.git"
+  },
+  "author": "Simon Crabtree",
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  }
+}
