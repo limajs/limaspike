@@ -11,6 +11,9 @@
     "url": "https://github.com/limajs/limaspike.git"
   },
   "author": "Simon Crabtree",
+  "dependencies": {
+    "socket.io": "*"
+  },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
