@@ -13,6 +13,7 @@
   "author": "Simon Crabtree",
   "devDependencies": {
     "mocha": "*",
-    "should": "*"
+    "chai": "*",
+    "sandboxed-module": "*"
   }
 }

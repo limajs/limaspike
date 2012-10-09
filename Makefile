@@ -1,4 +1,4 @@
 test:
-	@./node_modules/.bin/mocha --reporter spec --require should
+	@./node_modules/.bin/mocha --reporter dot --watch
 
 .PHONY: test
