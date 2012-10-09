@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Lima Spec Runner</title>
+        <script src="/js/require.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+
+            require.config({
+                baseUrl: '/js'
+            });
+            require(['main'], function () {
+                console.log("Loaded Main");
+            });
+            var socket = io.connect('http://localhost');
+            socket.on('runspec', function (data) {
+                console.log('Run Spec', data);
+            });
+        </script>
+    </head>
+    <body>
+        <h1>SpecRunner</h1>
+    </body>
+</html>
