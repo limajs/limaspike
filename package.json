@@ -12,12 +12,10 @@
   },
   "author": "Simon Crabtree",
   "dependencies": {
-    "socket.io": "*",
-    "browserify": "*"
+    "socket.io": "*"
   },
   "devDependencies": {
     "mocha": "*",
-    "chai": "*",
-    "sandboxed-module": "*"
+    "expect.js": "*"
   }
 }

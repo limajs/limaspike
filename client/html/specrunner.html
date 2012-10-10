@@ -3,15 +3,21 @@
     <head>
         <meta charset="utf-8"/>
         <title>Lima Spec Runner</title>
+        <link rel="stylesheet" href="/js/mocha.css">
         <script src="/js/require.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/mocha.js"></script>
+        <script src="/js/expect.js"></script>
         <script>
+
+            mocha.setup('bdd');
 
             require.config({
                 baseUrl: '/js'
             });
             require(['main'], function () {
                 console.log("Loaded Main");
+                mocha.run();
             });
             var socket = io.connect('http://localhost');
             socket.on('runspec', function (data) {
@@ -20,6 +26,6 @@
         </script>
     </head>
     <body>
-        <h1>SpecRunner</h1>
+        <div id="mocha"></div>
     </body>
 </html>

@@ -1,4 +1,4 @@
-var should = require('chai').should();
+var expect = require('expect.js');
 var handler = require('../lib/requestHandler');
 
 describe("The Request Handler", function () {
@@ -13,15 +13,14 @@ describe("The Request Handler", function () {
             }
         };
         handler(req, res);
-        actualResponse.should.equal('Hello Lima');
+        expect(actualResponse).to.be('Hello Lima');
     });
 
     it("Handles a request for /test by returning a specrunner.html page", function (done) {
         var res = {
             end: function (body) {
-                should.exist(body);
                 var specRunnerHtml = body.toString();
-                specRunnerHtml.should.contain('<title>Lima Spec Runner</title>');
+                expect(specRunnerHtml).to.contain('<title>Lima Spec Runner</title>');
                 done();
             }
         };
@@ -35,8 +34,7 @@ describe("The Request Handler", function () {
     it("Handles requests for /js files", function () {
         var res = {
             end: function (body) {
-                should.exist(body);
-                body.toString().should.contain('RequireJS');
+                expect(body.toString()).to.contain('RequireJS');
             }
         };
 
@@ -50,7 +48,7 @@ describe("The Request Handler", function () {
     it("Returns a 404 if js file is not found", function (done) {
         var res = {
             end: function () {
-                this.statusCode.should.equal(404);
+                expect(this.statusCode).to.be(404);
                 done();
             }
         };
