@@ -10,18 +10,35 @@
         <script src="/js/expect.js"></script>
         <script>
 
-            mocha.setup('bdd');
+            var socket = io.connect('http://localhost');
+            socket.on('runspec', function (data) {
+                console.log('Run Spec', data);
+            });
+
+            var limaReporter = function (runner) {
+                console.log("Started Lima Reporter");
+                runner.on('start', function (data) {
+                    console.log("Starting Lima Tests", data);
+                    socket.emit('spec', 'Starting Lima Tests');
+                });
+                runner.on('pass', function (data) {
+                    console.log("Test Passed", data);
+                    
+                    socket.emit('spec_pass', data.title);
+                });
+            };
+            mocha.setup({
+                ui: 'bdd',
+                reporter: limaReporter
+            });
 
             require.config({
                 baseUrl: '/js'
             });
+
             require(['main'], function () {
                 console.log("Loaded Main");
                 mocha.run();
-            });
-            var socket = io.connect('http://localhost');
-            socket.on('runspec', function (data) {
-                console.log('Run Spec', data);
             });
         </script>
     </head>
