@@ -12,7 +12,8 @@
   },
   "author": "Simon Crabtree",
   "dependencies": {
-    "socket.io": "*"
+    "socket.io": "*",
+    "glob": "*"
   },
   "devDependencies": {
     "mocha": "*",

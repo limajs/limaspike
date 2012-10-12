@@ -8,6 +8,7 @@ function createServer (port) {
     app = http.createServer(requestHandler);
     io = require('socket.io').listen(app);
     io.sockets.on('connection', socketHandler);
+
     app.listen(port);
     console.log("Lima Server - listening on port", port);
 }

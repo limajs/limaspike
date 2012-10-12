@@ -10,20 +10,18 @@
         <script src="/js/expect.js"></script>
         <script>
 
-            var socket = io.connect('http://localhost');
-            socket.on('runspec', function (data) {
-                console.log('Run Spec', data);
+            require.config({
+                baseUrl: '/js'
             });
 
             var limaReporter = function (runner) {
                 console.log("Started Lima Reporter");
-                runner.on('start', function (data) {
-                    console.log("Starting Lima Tests", data);
+                runner.on('start', function () {
+                    console.log("Starting Lima Tests");
                     socket.emit('spec', 'Starting Lima Tests');
                 });
                 runner.on('pass', function (data) {
                     console.log("Test Passed", data);
-                    
                     socket.emit('spec_pass', data.title);
                 });
             };
@@ -31,15 +29,15 @@
                 ui: 'bdd',
                 reporter: limaReporter
             });
-
-            require.config({
-                baseUrl: '/js'
+            var socket = io.connect('http://localhost');
+            socket.on('runspecs', function (specModules) {
+                console.log('Running Specs', specModules);
+                require(specModules, function () {
+                    console.log("Loaded Specs");
+                    mocha.run();
+                });
             });
 
-            require(['main'], function () {
-                console.log("Loaded Main");
-                mocha.run();
-            });
         </script>
     </head>
     <body>
