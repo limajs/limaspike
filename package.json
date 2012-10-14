@@ -17,6 +17,8 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "expect.js": "*"
+    "expect.js": "*",
+    "rewire": "*",
+    "sinon": "*"
   }
 }
