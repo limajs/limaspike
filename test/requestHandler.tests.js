@@ -6,18 +6,22 @@ var mockfs = {};
 handler.__set__("fs", mockfs);
 
 describe("The Request Handler", function () {
-    it("Handles a request for the root", function () {
+    it("Handles a request for the root", function (done) {
         var actualResponse = {};
         var req = {
             url: '/'
         };
         var res = {
             end: function (response) {
-                actualResponse = response;
+                expect(response).to.be('Main HTML');
+                done();
             }
         };
+        mockfs.readFile = function (name, callback) {
+            expect(name).to.contain('app.html');
+            callback(null, 'Main HTML');
+        };
         handler(req, res);
-        expect(actualResponse).to.be('Hello Lima');
     });
 
     it("Handles a request for /test by returning a specrunner.html page", function (done) {
@@ -34,7 +38,7 @@ describe("The Request Handler", function () {
         mockfs.readFile = function (name, callback) {
             expect(name).to.contain('specrunner.html');
             callback(null, 'Dummy Specrunner File');
-        }
+        };
 
         handler(req, res);
     });
@@ -53,7 +57,7 @@ describe("The Request Handler", function () {
         mockfs.readFile = function (name, callback) {
             expect(name).to.contain('require.js');
             callback(null, "RequireJSFile");
-        }
+        };
         handler(req, res);
     });
 
@@ -71,7 +75,7 @@ describe("The Request Handler", function () {
         mockfs.readFile = function (name, callback) {
             expect(name).to.contain('mocha.js');
             callback(null, "MochaJSFile");
-        }
+        };
         handler(req, res);
     });
 
@@ -92,7 +96,7 @@ describe("The Request Handler", function () {
         };
 
         handler(req, res);
-    })
+    });
 
     it("Returns a 404 if js file is not found", function (done) {
         var res = {
@@ -108,7 +112,7 @@ describe("The Request Handler", function () {
 
         mockfs.readFile = function (name, callback) {
             callback('FileNotFound!', null);
-        }
+        };
         handler(req, res);
     });
 });
