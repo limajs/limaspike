@@ -1,5 +1,8 @@
 var expect = require('expect.js');
-var handler = require('../lib/requestHandler');
+var rewire = require('rewire');
+var handler = rewire('../lib/requestHandler.js');
+var mockfs = {};
+handler.__set__("fs", mockfs);
 
 describe("The Request Handler", function () {
     it("Handles a request for the root", function () {
@@ -20,13 +23,17 @@ describe("The Request Handler", function () {
         var res = {
             end: function (body) {
                 var specRunnerHtml = body.toString();
-                expect(specRunnerHtml).to.contain('<title>Lima Spec Runner</title>');
+                expect(specRunnerHtml).to.contain('Dummy Specrunner File');
                 done();
             }
         };
         var req = {
             url: '/test'
         };
+        mockfs.readFile = function (name, callback) {
+            expect(name).to.contain('specrunner.html');
+            callback(null, 'Dummy Specrunner File');
+        }
 
         handler(req, res);
     });
@@ -34,7 +41,7 @@ describe("The Request Handler", function () {
     it("Handles requests for /js files", function () {
         var res = {
             end: function (body) {
-                expect(body.toString()).to.contain('RequireJS');
+                expect(body.toString()).to.be('RequireJSFile');
             }
         };
 
@@ -42,13 +49,17 @@ describe("The Request Handler", function () {
             url: '/js/require.js'
         };
 
+        mockfs.readFile = function (name, callback) {
+            expect(name).to.contain('require.js');
+            callback(null, "RequireJSFile");
+        }
         handler(req, res);
     });
 
     it("Handles requests for mocha files", function () {
         var res = {
             end: function (body) {
-                expect(body.toString()).to.contain('exports = module.exports = Mocha;');
+                expect(body.toString()).to.be("MochaJSFile");
             }
         };
 
@@ -56,6 +67,10 @@ describe("The Request Handler", function () {
             url: '/mocha/mocha.js'
         };
 
+        mockfs.readFile = function (name, callback) {
+            expect(name).to.contain('mocha.js');
+            callback(null, "MochaJSFile");
+        }
         handler(req, res);
     });
 
@@ -71,6 +86,9 @@ describe("The Request Handler", function () {
             url: '/js/FileWhichDoesntExist'
         };
 
+        mockfs.readFile = function (name, callback) {
+            callback('FileNotFound!', null);
+        }
         handler(req, res);
     });
 });
