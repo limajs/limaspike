@@ -24,6 +24,10 @@
                     console.log("Test Passed", data);
                     socket.emit('spec_pass', data.title);
                 });
+                runner.on('fail', function (data, err) {
+                    console.log("Failed", data, err.toString());
+                    socket.emit('spec_fail', data.title + " : " + err);
+                });
             };
             mocha.setup({
                 ui: 'bdd',
