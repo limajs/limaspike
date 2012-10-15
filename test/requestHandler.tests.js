@@ -1,4 +1,5 @@
 var expect = require('expect.js');
+var path = require('path');
 var rewire = require('rewire');
 var handler = rewire('../lib/requestHandler.js');
 var mockfs = {};
@@ -8,7 +9,7 @@ describe("The Request Handler", function () {
     it("Handles a request for the root", function () {
         var actualResponse = {};
         var req = {
-            url: ''
+            url: '/'
         };
         var res = {
             end: function (response) {
@@ -73,6 +74,25 @@ describe("The Request Handler", function () {
         }
         handler(req, res);
     });
+
+    it("Looks in the process.cwd directory for any other static files", function (done) {
+        var req = {
+            url:'/features/featureone.js'
+        };
+        var res = {
+            end: function (body) {
+                expect(body).to.be('My Test Feature Code');
+                done();
+            }
+        };
+        mockfs.readFile = function (name, callback) {
+            var expectedFilePath = path.join(process.cwd(), '/features/featureone.js');
+            expect(name).to.be(expectedFilePath);
+            callback(null, "My Test Feature Code");
+        };
+
+        handler(req, res);
+    })
 
     it("Returns a 404 if js file is not found", function (done) {
         var res = {
